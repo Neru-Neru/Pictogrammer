@@ -4,6 +4,8 @@
 
 When you are asked to show your face in a remote meeting, you can use this tool to show yourself as a pictogrammer!
 
+![2021-06-20-15-22-05_Trim](https://user-images.githubusercontent.com/56689497/122668562-ab87e480-d1f3-11eb-8338-deb70cedd482.gif)
+
 # 準備
 ## OPENVINOのインストール
 本ツールは，Intel社のOpenVINOを用いています．まず，下記URLから，OpenVINO toolkitを導入してください．実装環境では，OpenVINO 2021.3 ver.を使用しています．
