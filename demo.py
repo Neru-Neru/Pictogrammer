@@ -146,11 +146,17 @@ while True:
 				arm2_pos = [int(index_a2[1] *(img_origin.shape[1] / 57.0)), int(index_a2[0] *(img_origin.shape[0] / 32.0))]
 
 				face_center = (xmin+xmax)//2
-				if ((arm1_pos[0] <= face_center and arm2_pos[0] <= face_center) or (arm1_pos[0] <= face_center and arm2_pos[0] <= face_center)):
+				if ((arm1_pos[0] <= face_center and arm2_pos[0] <= face_center) or (arm1_pos[0] > face_center and arm2_pos[0] > face_center)):
 					drow_arm = np.argmax(np.array(arm1[index_a1[0]][index_a1[1]], arm2[index_a2[0]][index_a2[1]]))
 					drow_pos = [arm1_pos, arm2_pos][drow_arm]
 					if(max(arm1[index_a1[0]][index_a1[1]], arm2[index_a2[0]][index_a2[1]]) > 0.05):
-						cv2.rectangle(back, (max(drow_pos[0] - arm_width // 2,0), drow_pos[1]),(min(drow_pos[0] + arm_width // 2, img_origin.shape[1] - 1), img_origin.shape[0] - 1), list_emotion_color[index_max])
+						cv2.rectangle(back, (max(drow_pos[0] - arm_width // 2,0), drow_pos[1]),(min(drow_pos[0] + arm_width // 2, img_origin.shape[1] - 1), img_origin.shape[0] - 1), list_emotion_color[index_max], thickness=-1)
+				else:
+					if(arm1[index_a1[0]][index_a1[1]] > 0.05):
+						cv2.rectangle(back, (max(arm1_pos[0] - arm_width // 2,0), arm1_pos[1]),(min(arm1_pos[0] + arm_width // 2, img_origin.shape[1] - 1), img_origin.shape[0] - 1), list_emotion_color[index_max], thickness=-1)
+					if(arm2[index_a2[0]][index_a2[1]] > 0.05):
+						cv2.rectangle(back, (max(arm2_pos[0] - arm_width // 2,0), arm2_pos[1]),(min(arm2_pos[0] + arm_width // 2, img_origin.shape[1] - 1), img_origin.shape[0] - 1), list_emotion_color[index_max], thickness=-1)
+						
 				# 1つの顔で終了 
 			break
 
