@@ -104,6 +104,9 @@ while True:
 
 			# 出力値が最大のインデックスを得る 
 			index_max = np.argmax(res_emotion)
+			probability = softmax(res_emotion)
+			if (max(probability) < 0.25):
+				index_max = 0
 
 			# 各感情の文字列をリスト化 
 			list_emotion = ['neutral', 'happy', 'sad', 'surprise', 'anger']
