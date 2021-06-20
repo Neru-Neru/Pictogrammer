@@ -119,7 +119,7 @@ while True:
 
 			# 姿勢推定
 			neck = res_position['Mconv7_stage2_L2'][0][1]
-
+			#肩
 			right_sholder = res_position['Mconv7_stage2_L2'][0][2]
 			index_rs = np.unravel_index(np.argmax(right_sholder), right_sholder.shape)
 
@@ -132,6 +132,25 @@ while True:
 				cv2.drawMarker(back ,(int(index_ls[1] *(img_origin.shape[1] / 57.0)), int(index_ls[0] * (img_origin.shape[0]) / 32.0)),(255, 0, 0), markerType=cv2.MARKER_STAR, markerSize=10)
 				# 多角形描写（首とか使って滑らかにしたい）
 				cv2.fillConvexPoly(back, pos, list_emotion_color[index_max])
+
+				#腕の処理
+				arm1 = res_position['Mconv7_stage2_L2'][0][4]
+				index_a1 = np.unravel_index(np.argmax(arm1), arm1.shape)
+
+				arm2 = res_position['Mconv7_stage2_L2'][0][7]
+				index_a2 = np.unravel_index(np.argmax(arm2), arm1.shape)
+				
+				arm_width = (xmax - xmin) // 2
+				arm1_pos = [int(index_a1[1] *(img_origin.shape[1] / 57.0)), int(index_a1[0] *(img_origin.shape[0] / 32.0))]
+				
+				arm2_pos = [int(index_a2[1] *(img_origin.shape[1] / 57.0)), int(index_a2[0] *(img_origin.shape[0] / 32.0))]
+
+				face_center = (xmin+xmax)//2
+				if ((arm1_pos[0] <= face_center and arm2_pos[0] <= face_center) or (arm1_pos[0] <= face_center and arm2_pos[0] <= face_center)):
+					drow_arm = np.argmax(np.array(arm1[index_a1[0]][index_a1[1]], arm2[index_a2[0]][index_a2[1]]))
+					drow_pos = [arm1_pos, arm2_pos][drow_arm]
+					if(max(arm1[index_a1[0]][index_a1[1]], arm2[index_a2[0]][index_a2[1]]) > 0.05):
+						cv2.rectangle(back, (max(drow_pos[0] - arm_width // 2,0), drow_pos[1]),(min(drow_pos[0] + arm_width // 2, img_origin.shape[1] - 1), img_origin.shape[0] - 1), list_emotion_color[index_max])
 				# 1つの顔で終了 
 			break
 
